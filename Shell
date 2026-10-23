@@ -1,0 +1,6 @@
+mkdir backend
+mkdir frontend
+mkdir docs
+mkdir data
+mkdir prompts
+mkdir tests 
