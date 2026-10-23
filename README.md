@@ -1,2 +1,2 @@
 # smartstay-ai
-SmartStay AI - Generative AI Hospitality Assistant
+SmartStay AI - Generative AI Hospitality & Tourism Assistant
