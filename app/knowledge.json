@@ -1,0 +1,16 @@
+[
+  {"id":"h1","category":"hotel","name":"Check-in and check-out","price":0,"open":"00:00-24:00","text":"Check-in is from 14:00 and check-out is until 11:00. Late check-out until 15:00 is available on request for USD 20."},
+  {"id":"h2","category":"hotel","name":"Wi-Fi and breakfast","price":0,"open":"00:00-24:00","text":"Free Wi-Fi in all rooms. Breakfast buffet is served 06:30-10:30 in the Lotus Restaurant and is included in the room rate."},
+  {"id":"h3","category":"hotel","name":"Pool and gym","price":0,"open":"06:00-21:00","text":"The rooftop pool and gym are open 06:00-21:00 and are free for guests."},
+  {"id":"h4","category":"hotel","name":"Airport transfer","price":35,"open":"00:00-24:00","text":"Airport transfer to Bandaranaike International Airport costs USD 35 per car. Please book 12 hours ahead."},
+  {"id":"h5","category":"hotel","name":"Cancellation policy","price":0,"open":"00:00-24:00","text":"Free cancellation up to 48 hours before arrival. After that, the first night is charged."},
+  {"id":"d1","category":"dining","name":"Lotus Restaurant (Sri Lankan buffet)","price":18,"open":"12:00-22:00","text":"Hotel restaurant serving rice and curry, hoppers and seafood. Vegetarian options available."},
+  {"id":"d2","category":"dining","name":"Ministry of Crab","price":60,"open":"18:00-22:30","text":"Famous crab restaurant in the Dutch Hospital, 10 minutes by car. Seafood only, not vegetarian."},
+  {"id":"d3","category":"dining","name":"Pettah Street Food Walk","price":12,"open":"09:00-17:00","text":"Guided walk through Pettah market tasting street food. Good for vegetarians and budget travellers."},
+  {"id":"a1","category":"activity","name":"Gangaramaya Temple","price":5,"open":"06:00-18:00","text":"Buddhist temple and museum, 15 minutes by car. Dress modestly."},
+  {"id":"a2","category":"activity","name":"Galle Face Green sunset walk","price":0,"open":"00:00-24:00","text":"Free seafront promenade, 5 minutes from the hotel. Best at sunset."},
+  {"id":"a3","category":"activity","name":"Colombo National Museum","price":8,"open":"09:00-17:00","text":"Sri Lanka's largest museum, good for history and culture lovers. Closed on public holidays."},
+  {"id":"a4","category":"activity","name":"Lotus Tower","price":20,"open":"09:00-21:00","text":"Observation deck with city views. Best at dusk."},
+  {"id":"a5","category":"activity","name":"Galle Fort day trip","price":70,"open":"08:00-18:00","text":"Full-day trip with car and guide to the UNESCO-listed Galle Fort, about 2 hours each way. Beach and shopping."},
+  {"id":"s1","category":"spa","name":"Serenity Spa","price":45,"open":"10:00-20:00","text":"Ayurvedic massage and facials at the hotel spa. 60-minute massage costs USD 45."}
+]

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SmartStay AI - Requirements Survey</title>
+<style>
+  :root{--bg:#f5f7fa;--card:#fff;--text:#1d2733;--accent:#0f766e;--muted:#6b7785;--border:#dde3ea}
+  @media (prefers-color-scheme:dark){:root{--bg:#10161c;--card:#18212a;--text:#e7edf3;--muted:#92a0ae;--border:#2a3745}}
+  *{box-sizing:border-box} body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:var(--text)}
+  header{background:var(--accent);color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+  header h1{font-size:18px;margin:0} header a{color:#fff;font-size:13px}
+  main{max-width:760px;margin:0 auto;padding:16px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:14px}
+  h2{font-size:16px;margin:0 0 10px} label{display:block;margin:6px 0;font-size:14px}
+  select,input[type=text],input[type=password],textarea{width:100%;padding:9px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font:inherit}
+  textarea{min-height:70px} .rate{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:8px 0;font-size:14px}
+  .rate select{width:auto} .hint{color:var(--muted);font-size:12px}
+  button{background:var(--accent);color:#fff;border:0;border-radius:8px;padding:10px 16px;cursor:pointer;font-size:14px;margin-right:6px}
+  button.alt{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+  #msg{margin-top:8px;font-size:14px} pre{white-space:pre-wrap;font-size:13px}
+  .tabs button{margin-bottom:12px}
+</style>
+</head>
+<body>
+<header><h1>SmartStay AI - Requirements Research</h1><a href="/">Back to chat</a></header>
+<main>
+  <div class="tabs"><button id="t1">Survey</button><button id="t2" class="alt">Interview notes (staff)</button><button id="t3" class="alt">Results &amp; export (staff)</button></div>
+
+  <!-- SURVEY -->
+  <section id="p1">
+    <div class="card"><h2>About this survey</h2>
+      <p class="hint">Anonymous. It takes about 3 minutes and helps design an AI assistant for hotels. Please do not type names, emails or phone numbers.</p>
+      <label>I am a:
+        <select id="role"><option value="guest">Hotel guest / traveller</option><option value="staff">Hotel staff member</option></select></label>
+    </div>
+    <div class="card"><h2>Functional needs - what should the assistant do?</h2>
+      <p class="hint">Tick everything that would be useful.</p>
+      <div id="features"></div>
+      <label>Anything else it should do? <textarea id="f_other"></textarea></label>
+    </div>
+    <div class="card"><h2>Non-functional needs - how should it behave?</h2>
+      <p class="hint">1 = not important, 5 = very important</p>
+      <div id="qualities"></div>
+      <label>Which languages do you need? <input type="text" id="langs" placeholder="e.g. English, Sinhala, Tamil"></label>
+      <label>What would make you NOT trust an AI assistant? <textarea id="distrust"></textarea></label>
+      <label>Any other comments? <textarea id="comments"></textarea></label>
+    </div>
+    <label><input type="checkbox" id="agree"> I agree that my anonymous answers may be used for this academic project.</label>
+    <p><button id="send">Submit survey</button></p><div id="msg"></div>
+  </section>
+
+  <!-- INTERVIEW -->
+  <section id="p2" style="display:none">
+    <div class="card"><h2>Record an interview (staff only)</h2>
+      <p class="hint">Use a code like G01 or S03. Never write the person's real name.</p>
+      <label>Staff token <input type="password" id="tok" value="change-me"></label>
+      <label>Interviewee type <select id="irole"><option value="guest">Guest</option><option value="staff">Staff</option></select></label>
+      <label>Participant code <input type="text" id="icode" placeholder="G01"></label>
+      <label>Functional needs mentioned <textarea id="ifn"></textarea></label>
+      <label>Non-functional needs mentioned (privacy, speed, trust, language...) <textarea id="inf"></textarea></label>
+      <label>Other notes / quotes <textarea id="inotes"></textarea></label>
+      <button id="isend">Save interview</button><div id="imsg"></div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="p3" style="display:none">
+    <div class="card"><h2>Results (staff only)</h2>
+      <label>Staff token <input type="password" id="tok2" value="change-me"></label>
+      <button id="load">Load summary</button>
+      <button class="alt" id="exS">Download surveys.csv</button>
+      <button class="alt" id="exI">Download interviews.csv</button>
+      <pre id="out"></pre>
+    </div>
+  </section>
+</main>
+<script>
+const FEATURES = [
+  "Answer hotel questions (check-in, Wi-Fi, breakfast, policies)",
+  "Recommend local restaurants and attractions",
+  "Plan a day or trip within my budget",
+  "Send service requests (towels, housekeeping, room service)",
+  "Book spa, tours or airport transfers",
+  "Remember my preferences (with my permission)",
+  "Hand over to a human for complaints or urgent issues",
+  "Give staff a dashboard of guest requests"
+];
+const QUALITIES = [
+  ["rate_speed","Fast replies (under 5 seconds)"],
+  ["rate_privacy","My personal data is protected"],
+  ["rate_accuracy","Accurate information (no made-up answers)"],
+  ["rate_language","Works in my own language"],
+  ["rate_ease","Easy to use, no training needed"],
+  ["rate_available","Available 24/7, even if the AI is down"],
+  ["rate_trust","Clearly tells me it is an AI and shows sources"]
+];
+const $ = id => document.getElementById(id);
+FEATURES.forEach((f,i)=>{ $("features").insertAdjacentHTML("beforeend", `<label><input type="checkbox" name="feat" value="${f}"> ${f}</label>`); });
+QUALITIES.forEach(([k,t])=>{ $("qualities").insertAdjacentHTML("beforeend",
+  `<div class="rate"><span>${t}</span><select id="${k}"><option value="">-</option>${[1,2,3,4,5].map(n=>`<option>${n}</option>`).join("")}</select></div>`); });
+
+function show(n){ [1,2,3].forEach(i=>{ $("p"+i).style.display = i===n ? "block":"none"; $("t"+i).className = i===n ? "" : "alt"; }); }
+$("t1").onclick=()=>show(1); $("t2").onclick=()=>show(2); $("t3").onclick=()=>show(3);
+
+$("send").onclick = async () => {
+  if(!$("agree").checked){ $("msg").textContent="Please tick the agreement box first."; return; }
+  const answers = { features:[...document.querySelectorAll("input[name=feat]:checked")].map(x=>x.value),
+    feature_other:$("f_other").value, languages:$("langs").value, distrust:$("distrust").value, comments:$("comments").value };
+  QUALITIES.forEach(([k])=>answers[k]=$(k).value);
+  try{
+    const r = await fetch("/api/survey",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({role:$("role").value,answers})});
+    $("msg").textContent = r.ok ? "Thank you! Your response was saved." : "Could not save. Please try again.";
+    if(r.ok) $("send").disabled = true;
+  }catch(e){ $("msg").textContent="Network error. Please try again."; }
+};
+
+$("isend").onclick = async () => {
+  const r = await fetch("/api/staff/interview",{method:"POST",headers:{"Content-Type":"application/json","X-Staff-Token":$("tok").value},
+    body:JSON.stringify({role:$("irole").value,participant_code:$("icode").value,functional_needs:$("ifn").value,non_functional_needs:$("inf").value,notes:$("inotes").value})});
+  $("imsg").textContent = r.ok ? "Interview saved." : (r.status===401 ? "Wrong staff token." : "Could not save.");
+  if(r.ok) ["icode","ifn","inf","inotes"].forEach(i=>$(i).value="");
+};
+
+$("load").onclick = async () => {
+  const r = await fetch("/api/staff/research",{headers:{"X-Staff-Token":$("tok2").value}});
+  if(!r.ok){ $("out").textContent="Wrong staff token."; return; }
+  $("out").textContent = JSON.stringify(await r.json(), null, 2);
+};
+async function dl(kind){
+  const r = await fetch("/api/staff/export/"+kind,{headers:{"X-Staff-Token":$("tok2").value}});
+  if(!r.ok){ $("out").textContent="Wrong staff token."; return; }
+  const a=document.createElement("a"); a.href=URL.createObjectURL(await r.blob()); a.download=kind+".csv"; a.click();
+}
+$("exS").onclick=()=>dl("surveys"); $("exI").onclick=()=>dl("interviews");
+</script>
+</body>
+</html>
